@@ -1,6 +1,6 @@
 <extension
 	name="I like it! Ver1.00"
-	thumbnailUrl="https://i-like-it.googlecode.com/svn/trunk/ILikeIt_thumbnail.png"
+	thumbnailUrl="http://i-like-it.googlecode.com/svn/trunk/ILikeIt_thumbnail.png"
 	description="これは、Google Wave用のガジェットです。Wassrのような「イイネ！」ボタンを表現します。This is a gadget for Google Wave. 'fav' button like Wassr is expressed."
 	>
 	<!--
@@ -29,7 +29,7 @@
 	THE SOFTWARE.
 	-->
 	<author name="Jaken"/>
-	<menuHook location="toolbar" text="Insert a 'I like it!' gadget." iconUrl="https://i-like-it.googlecode.com/svn/trunk/icon.png">
-		<insertGadget url="https://i-like-it.googlecode.com/svn/trunk/ILikeIt.xml"/>
+	<menuHook location="toolbar" text="Insert a 'I like it!' gadget." iconUrl="http://i-like-it.googlecode.com/svn/trunk/icon.png">
+		<insertGadget url="http://i-like-it.googlecode.com/svn/trunk/ILikeIt.xml"/>
 	</menuHook>
 </extension>
