@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+	<!--
+	I like it! - Favorite of Wassrlike -
+
+	The MIT License
+
+	Copyright (c) 2009 Jaken.
+
+	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the "Software"), to deal
+	in the Software without restriction, including without limitation the rights
+	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:
+
+	The above copyright notice and this permission notice shall be included in
+	all copies or substantial portions of the Software.
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+	THE SOFTWARE.
+	-->
+	<ModulePrefs
+		title="I like it!"
+		description="これは、Google Wave用のガジェットです。Wassrのような「イイネ！」ボタンを表現します。"
+		author="Jaken"
+		height="20"
+		>
+		<Require feature="wave" />
+	</ModulePrefs>
+<Content type="html">
+<![CDATA[
+<style type="text/css">
+
+.ilikeit {
+	background-color:#FCFCFC;
+	border:1px dotted #ddd;
+	color:#666666;
+	font-size:70%;
+	margin: 0px 0 0 0;
+	padding:2px 3px;
+	font-family:"メイリオ","Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3","ＭＳ Ｐゴシック", "Osaka", sans-selif;
+	text-align:left;
+
+	height: 18px;
+}
+
+.ilikeit_left {
+	float:left;
+	display:inline;
+
+	vertical-align:middle;
+	height: 16px;
+}
+
+.ilikeit_right {
+	float:right;
+	display:inline;
+
+	background-color:#FAFAFA;
+	border:1px dotted #DDDDDD;
+	cursor:pointer;
+	margin-left:4px;
+	vertical-align:text-bottom;
+	white-space:nowrap;
+}
+
+.ilikeit_left img{
+	vertical-align:text-bottom;
+	border:medium none;
+	margin:0;
+	padding:0;
+}
+
+#inputbutton {
+}
+
+
+.clear-both {
+	border:0 none;
+	clear:both;
+	display:block;
+	font-size:0;
+	height:1px;
+	line-height:0;
+	margin:0 -1px -1px 0;
+	overflow:hidden;
+	padding:0;
+	width:1px;
+}
+
+</style>
+
+<div class="ilikeit">
+	<div class="ilikeit_left" id="likememberlist">
+	</div>
+	<div class="ilikeit_right">
+		<input id="inputbutton" type="image" src="" alt="" title="" height="16" width="16" onClick="buttonClicked()" />
+	</div>
+</div>
+<div class="clear-both"> </div>
+
+<script type="text/javascript">
+	// Google Wave用のイイネ！ボタンのガジェットです。
+	// これは、Google Wave用のガジェットです。
+	// Wassrのような「イイネ！」ボタンを表現します。
+	// New BSD License
+	// tags : Google Wave,Gadgets
+
+	var likememberlist = null;
+	var inputbutton = null;
+	var default_url = "https://i-like-it.googlecode.com/svn/trunk/";
+
+
+	function getIdtoKey(id)
+	{
+		var tmp = String('key-' + id);
+		return tmp;
+	}
+
+	function getKeytoId(key)
+	{
+		var tmp = String(key).substring(4);
+		return tmp;
+	}
+
+	function createHash(key,value)
+	{
+		var tmp = {};
+		tmp[key] = value;
+		return tmp;
+	}
+
+	function buttonClicked()
+	{
+		var ViewerId = wave.getViewer().getId();
+
+		var value = parseInt(wave.getState().get(getIdtoKey(ViewerId), '0'));
+		if(value == 0)
+		{
+			wave.getState().submitDelta(createHash(getIdtoKey(ViewerId),'1'));
+		}
+		else
+		{
+			wave.getState().submitDelta(createHash(getIdtoKey(ViewerId),'0'));
+		}
+	}
+
+	function stateUpdated()
+	{
+//		if (wave.getState() == null)
+//		{
+//		}
+
+		var ViewerId = wave.getViewer().getId();
+
+		likememberlist.innerHTML = "イイネ: ";
+		var blnLike = 1;
+
+
+		var aryIdList = wave.getState().getKeys();
+
+		for (var count = 0; count < aryIdList.length; count++)
+		{
+			var TargetId = getKeytoId(aryIdList[count]);
+			var TargetParticipant = wave.getParticipantById(TargetId);
+
+			var TargetDisplayName = TargetParticipant.getDisplayName();
+			var TargetThumbnailUrl = TargetParticipant.getThumbnailUrl();
+
+
+			var value = parseInt(wave.getState().get(getIdtoKey(TargetId), '0'));
+			if(value == 1)
+			{
+				var tmp = document.createElement('img');
+				tmp.src = TargetThumbnailUrl;
+				tmp.alt = TargetDisplayName;
+				tmp.title = TargetDisplayName;
+				tmp.width = 16;
+				tmp.height = 16;
+
+				likememberlist.appendChild(tmp);
+			}
+
+			if((TargetId == ViewerId) && (value == 1))
+			{
+				blnLike = 0;
+			}
+		}
+
+		var image_name = "";
+		var alt_msg = "";
+
+		if(blnLike == 0)
+		{
+			image_name = "like.gif";
+			alt_msg = "イイネを取り消す";
+		}
+		else
+		{
+			image_name = "dislike.gif";
+			alt_msg = "イイネする";
+		}
+		inputbutton.src = default_url + image_name;
+		inputbutton.alt = alt_msg;
+		inputbutton.title = alt_msg;
+
+	}
+
+	function init()
+	{
+		//alert("Invoke Wave Instance");
+
+		likememberlist = document.getElementById('likememberlist');
+		inputbutton = document.getElementById('inputbutton');
+
+		//wave.log("ILikeIt.init()");
+
+		if(wave && wave.isInWaveContainer())
+		{
+			wave.setStateCallback(stateUpdated);
+		}
+		stateUpdated();
+	}
+
+	gadgets.util.registerOnLoadHandler(init);
+
+</script>
+]]>
+  </Content>
+</Module>
