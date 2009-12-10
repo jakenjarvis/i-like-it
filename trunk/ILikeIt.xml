@@ -114,7 +114,7 @@
 
 	var likememberlist = null;
 	var inputbutton = null;
-	var default_url = "https://i-like-it.googlecode.com/svn/trunk/";
+	var default_url = "http://i-like-it.googlecode.com/svn/trunk/";
 
 
 	function getIdtoKey(id)
