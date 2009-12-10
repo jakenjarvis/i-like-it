@@ -106,29 +106,30 @@
 <div class="clear-both"> </div>
 
 <script type="text/javascript">
-	// Google Wave用のイイネ！ボタンのガジェットです。
-	// これは、Google Wave用のガジェットです。
-	// Wassrのような「イイネ！」ボタンを表現します。
-	// New BSD License
-	// tags : Google Wave,Gadgets
-
+	// 「イイネ」をしたメンバー一覧の画像を表示する場所
 	var likememberlist = null;
+
+	// 「イイネ」ボタンをトグル動作させるために書き換える場所
 	var inputbutton = null;
+
+	// 絶対参照先のURL（XML設置場所）
 	var default_url = "http://i-like-it.googlecode.com/svn/trunk/";
 
-
+	// ユーザIDに文字列を連結して返却します。
 	function getIdtoKey(id)
 	{
 		var tmp = String('key-' + id);
 		return tmp;
 	}
 
+	// KEYに連結した文字列を削って、ユーザIDを返却します。
 	function getKeytoId(key)
 	{
 		var tmp = String(key).substring(4);
 		return tmp;
 	}
 
+	// keyとvalueの値を、新しい連想配列に格納して返却します。
 	function createHash(key,value)
 	{
 		var tmp = {};
@@ -136,47 +137,66 @@
 		return tmp;
 	}
 
+	// 「イイネ」ボタンが押下されたときに呼び出されます。
 	function buttonClicked()
 	{
+		// 「イイネ」ボタンを押下した人のユーザIDを取得します。
 		var ViewerId = wave.getViewer().getId();
 
+		// 「イイネ」ボタンを押下した人が既に「イイネ」をしているか確認します。
+		// ユーザIDをKEYに変換し、ステートに保管されている値を数値として取得します。
 		var value = parseInt(wave.getState().get(getIdtoKey(ViewerId), '0'));
 		if(value == 0)
 		{
+			// ステートに保管されていない、または、「イイネ」してない場合は
+			// ステートに「イイネ」状態を保管します。
 			wave.getState().submitDelta(createHash(getIdtoKey(ViewerId),'1'));
 		}
 		else
 		{
+			// 既に「イイネ」している場合は
+			// ステートに「イイネ」してない状態を保管します。
 			wave.getState().submitDelta(createHash(getIdtoKey(ViewerId),'0'));
 		}
 	}
 
+	// ステートの状態が変更された場合に、呼び出されます。
 	function stateUpdated()
 	{
 //		if (wave.getState() == null)
 //		{
 //		}
 
+		// 処理中の人のユーザIDを取得します。
 		var ViewerId = wave.getViewer().getId();
 
+		// メンバー一覧の初期表示設定
 		likememberlist.innerHTML = "イイネ: ";
+		// イイネ状態の初期値設定
 		var blnLike = 1;
 
-
+		// ステートに保管されているKEYの一覧を配列で取得します。
 		var aryIdList = wave.getState().getKeys();
 
+		// 取得した配列の数だけループして、処理を行います。
 		for (var count = 0; count < aryIdList.length; count++)
 		{
+			// 処理対象のユーザIDを取得します。
 			var TargetId = getKeytoId(aryIdList[count]);
+			// 処理対象のユーザ情報を取得するためのParticipantオブジェクトを取得します。
 			var TargetParticipant = wave.getParticipantById(TargetId);
 
+			// ユーザ情報より、表示名とサムネイルの画像URLを取得します。
 			var TargetDisplayName = TargetParticipant.getDisplayName();
 			var TargetThumbnailUrl = TargetParticipant.getThumbnailUrl();
 
-
+			// 処理対象のユーザIDより、KEYを作成し、ステートに保管されている状態を取得します。
 			var value = parseInt(wave.getState().get(getIdtoKey(TargetId), '0'));
 			if(value == 1)
 			{
+				// 処理対象のユーザが「イイネ」している場合。
+
+				// サムネイルの画像用のimgタグを生成し、メンバー一覧に追加します。
 				var tmp = document.createElement('img');
 				tmp.src = TargetThumbnailUrl;
 				tmp.alt = TargetDisplayName;
@@ -187,6 +207,8 @@
 				likememberlist.appendChild(tmp);
 			}
 
+			// 処理対象のユーザと、処理中のユーザが等しく、かつ、「イイネ」をしている場合は、
+			// 「イイネ」ボタンの状態を「イイネを取り消す」にするため、フラグをOFFにする。
 			if((TargetId == ViewerId) && (value == 1))
 			{
 				blnLike = 0;
@@ -196,38 +218,47 @@
 		var image_name = "";
 		var alt_msg = "";
 
+		// ※トグル式のボタン表示なので、状態が逆転しているように見えるので注意。（動きはWassrに準拠させている）
 		if(blnLike == 0)
 		{
+			// 「イイネ」されている場合は、「イイネ」ボタンを表示し、「イイネを取り消す」のコメントを表示する。
 			image_name = "like.gif";
 			alt_msg = "イイネを取り消す";
 		}
 		else
 		{
+			// 「イイネ」されていない場合は、「イイネしてない」ボタンを表示し、「イイネする」のコメントを表示する。
 			image_name = "dislike.gif";
 			alt_msg = "イイネする";
 		}
+		// 「イイネ」ボタンのタグ属性を書き換える。
 		inputbutton.src = default_url + image_name;
 		inputbutton.alt = alt_msg;
 		inputbutton.title = alt_msg;
 
 	}
 
+	// 初期化処理。registerOnLoadHandlerで登録したことによって、ロード完了時に呼び出される。
 	function init()
 	{
 		//alert("Invoke Wave Instance");
 
+		// 書き換え対象のタグを取得しておく。
 		likememberlist = document.getElementById('likememberlist');
 		inputbutton = document.getElementById('inputbutton');
 
 		//wave.log("ILikeIt.init()");
 
+		// Waveコンテナの状態が準備できているなら、ステート変更時のファンクションを登録する。
 		if(wave && wave.isInWaveContainer())
 		{
 			wave.setStateCallback(stateUpdated);
 		}
+		// 初回の表示処理を行う。
 		stateUpdated();
 	}
 
+	// ロード完了時のファンクションを登録する。
 	gadgets.util.registerOnLoadHandler(init);
 
 </script>
