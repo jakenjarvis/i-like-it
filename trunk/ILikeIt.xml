@@ -188,7 +188,12 @@
 
 			// ユーザ情報より、表示名とサムネイルの画像URLを取得します。
 			var TargetDisplayName = TargetParticipant.getDisplayName();
-			var TargetThumbnailUrl = TargetParticipant.getThumbnailUrl();
+
+			// Participant.getThumbnailUrl(); のバグ暫定対応。以下を参照。
+			// http://groups.google.co.jp/group/google-wave-api-japan/browse_thread/thread/680a44da75e9ae28?hl=ja
+			// http://code.google.com/p/google-wave-resources/issues/detail?id=570
+			//var TargetThumbnailUrl = TargetParticipant.getThumbnailUrl();
+			var TargetThumbnailUrl = TargetParticipant.getThumbnailUrl().replace('wave.google.com//','');
 
 			// 処理対象のユーザIDより、KEYを作成し、ステートに保管されている状態を取得します。
 			var value = parseInt(wave.getState().get(getIdtoKey(TargetId), '0'));
