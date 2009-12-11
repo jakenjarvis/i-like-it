@@ -29,7 +29,6 @@
 		title="I like it!"
 		description="これは、Google Wave用のガジェットです。Wassrのような「イイネ！」ボタンを表現します。"
 		author="Jaken"
-		height="20"
 		>
 		<Require feature="wave" />
 		<Require feature="dynamic-height" /><!-- ガジェット自身の高さを自動調整するために必要 -->
