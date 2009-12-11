@@ -190,8 +190,6 @@
 			var TargetDisplayName = TargetParticipant.getDisplayName();
 			var TargetThumbnailUrl = TargetParticipant.getThumbnailUrl();
 
-alert(TargetThumbnailUrl);
-
 			// 処理対象のユーザIDより、KEYを作成し、ステートに保管されている状態を取得します。
 			var value = parseInt(wave.getState().get(getIdtoKey(TargetId), '0'));
 			if(value == 1)
@@ -207,6 +205,14 @@ alert(TargetThumbnailUrl);
 				tmp.height = 16;
 
 				likememberlist.appendChild(tmp);
+
+				var tmp2 = document.createElement('p');
+				var text = document.createTextNode(TargetThumbnailUrl);
+				tmp2.appendChild(text);
+				likememberlist.appendChild(tmp2);
+
+				var tmp3 = document.createElement('br');
+				likememberlist.appendChild(tmp3);
 			}
 
 			// 処理対象のユーザと、処理中のユーザが等しく、かつ、「イイネ」をしている場合は、
