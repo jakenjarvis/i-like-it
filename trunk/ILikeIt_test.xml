@@ -104,6 +104,7 @@
 	</div>
 </div>
 <div class="clear-both"> </div>
+<div id="debug_out"></div>
 
 <script type="text/javascript">
 	// 「イイネ」をしたメンバー一覧の画像を表示する場所
@@ -111,6 +112,8 @@
 
 	// 「イイネ」ボタンをトグル動作させるために書き換える場所
 	var inputbutton = null;
+
+	var debug_out = null;
 
 	// 絶対参照先のURL（XML設置場所）
 	var default_url = "http://i-like-it.googlecode.com/svn/trunk/";
@@ -206,13 +209,16 @@
 
 				likememberlist.appendChild(tmp);
 
+
+				debug_out.appendChild(tmp);
+
 				var tmp2 = document.createElement('p');
 				var text = document.createTextNode(TargetThumbnailUrl);
 				tmp2.appendChild(text);
-				likememberlist.appendChild(tmp2);
+				debug_out.appendChild(tmp2);
 
 				var tmp3 = document.createElement('br');
-				likememberlist.appendChild(tmp3);
+				debug_out.appendChild(tmp3);
 			}
 
 			// 処理対象のユーザと、処理中のユーザが等しく、かつ、「イイネ」をしている場合は、
@@ -256,6 +262,7 @@
 		// 書き換え対象のタグを取得しておく。
 		likememberlist = document.getElementById('likememberlist');
 		inputbutton = document.getElementById('inputbutton');
+		debug_out = document.getElementById('debug_out');
 
 		//wave.log("ILikeIt.init()");
 
