@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+	<!--
+	I like it! - Favorite of Wassrlike -
+
+	The MIT License
+
+	Copyright (c) 2009 Jaken.
+
+	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the "Software"), to deal
+	in the Software without restriction, including without limitation the rights
+	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:
+
+	The above copyright notice and this permission notice shall be included in
+	all copies or substantial portions of the Software.
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+	THE SOFTWARE.
+	-->
+	<ModulePrefs
+		title="I like it!"
+		description="これは、Google Wave用のガジェットです。Wassrのような「イイネ！」ボタンを表現します。"
+		author="Jaken"
+		>
+		<Require feature="wave" />
+		<Require feature="dynamic-height" /><!-- ガジェット自身の高さを自動調整するために必要 -->
+	</ModulePrefs>
+<Content type="html">
+<![CDATA[
+<style type="text/css">
+
+.ilikeit {
+	background-color:#FCFCFC;
+	border:1px dotted #ddd;
+	color:#666666;
+	font-size:70%;
+	margin: 0px 0 0 0;
+	padding:2px 3px;
+	font-family:"メイリオ","Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3","ＭＳ Ｐゴシック", "Osaka", sans-selif;
+	text-align:left;
+
+	height: 18px;
+}
+
+.ilikeit_left {
+	float:left;
+	display:inline;
+
+	vertical-align:middle;
+	height: 16px;
+}
+
+.ilikeit_right {
+	float:right;
+	display:inline;
+
+	background-color:#FAFAFA;
+	border:1px dotted #DDDDDD;
+	cursor:pointer;
+	margin-left:4px;
+	vertical-align:text-bottom;
+	white-space:nowrap;
+}
+
+.ilikeit_left img{
+	vertical-align:text-bottom;
+	border:medium none;
+	margin:0;
+	padding:0;
+}
+
+#inputbutton {
+}
+
+
+.clear-both {
+	border:0 none;
+	clear:both;
+	display:block;
+	font-size:0;
+	height:1px;
+	line-height:0;
+	margin:0 -1px -1px 0;
+	overflow:hidden;
+	padding:0;
+	width:1px;
+}
+
+</style>
+
+<div class="ilikeit">
+	<div class="ilikeit_left" id="likememberlist">
+	</div>
+	<div class="ilikeit_right">
+		<input id="inputbutton" type="image" src="" alt="" title="" height="16" width="16" onClick="buttonClicked()" />
+	</div>
+</div>
+<div class="clear-both"> </div>
+
+<script type="text/javascript">
+	// 「イイネ」をしたメンバー一覧の画像を表示する場所
+	var likememberlist = null;
+
+	// 「イイネ」ボタンをトグル動作させるために書き換える場所
+	var inputbutton = null;
+
+	// 絶対参照先のURL（XML設置場所）
+	var default_url = "http://i-like-it.googlecode.com/svn/trunk/";
+
+	// ユーザIDに文字列を連結して返却します。
+	function getIdtoKey(id)
+	{
+		var tmp = String('key-' + id);
+		return tmp;
+	}
+
+	// KEYに連結した文字列を削って、ユーザIDを返却します。
+	function getKeytoId(key)
+	{
+		var tmp = String(key).substring(4);
+		return tmp;
+	}
+
+	// keyとvalueの値を、新しい連想配列に格納して返却します。
+	function createHash(key,value)
+	{
+		var tmp = {};
+		tmp[key] = value;
+		return tmp;
+	}
+
+	// 「イイネ」ボタンが押下されたときに呼び出されます。
+	function buttonClicked()
+	{
+		// 「イイネ」ボタンを押下した人のユーザIDを取得します。
+		var ViewerId = wave.getViewer().getId();
+
+		// 「イイネ」ボタンを押下した人が既に「イイネ」をしているか確認します。
+		// ユーザIDをKEYに変換し、ステートに保管されている値を数値として取得します。
+		var value = parseInt(wave.getState().get(getIdtoKey(ViewerId), '0'));
+		if(value == 0)
+		{
+			// ステートに保管されていない、または、「イイネ」してない場合は
+			// ステートに「イイネ」状態を保管します。
+			wave.getState().submitDelta(createHash(getIdtoKey(ViewerId),'1'));
+		}
+		else
+		{
+			// 既に「イイネ」している場合は
+			// ステートに「イイネ」してない状態を保管します。
+			wave.getState().submitDelta(createHash(getIdtoKey(ViewerId),'0'));
+		}
+	}
+
+	// ステートの状態が変更された場合に、呼び出されます。
+	function stateUpdated()
+	{
+//		if (wave.getState() == null)
+//		{
+//		}
+
+		// 処理中の人のユーザIDを取得します。
+		var ViewerId = wave.getViewer().getId();
+
+		// メンバー一覧の初期表示設定
+		likememberlist.innerHTML = "イイネ: ";
+		// イイネ状態の初期値設定
+		var blnLike = 1;
+
+		// ステートに保管されているKEYの一覧を配列で取得します。
+		var aryIdList = wave.getState().getKeys();
+
+		// 取得した配列の数だけループして、処理を行います。
+		for (var count = 0; count < aryIdList.length; count++)
+		{
+			// 処理対象のユーザIDを取得します。
+			var TargetId = getKeytoId(aryIdList[count]);
+			// 処理対象のユーザ情報を取得するためのParticipantオブジェクトを取得します。
+			var TargetParticipant = wave.getParticipantById(TargetId);
+
+			// ユーザ情報より、表示名とサムネイルの画像URLを取得します。
+			var TargetDisplayName = TargetParticipant.getDisplayName();
+			var TargetThumbnailUrl = TargetParticipant.getThumbnailUrl();
+
+			// 処理対象のユーザIDより、KEYを作成し、ステートに保管されている状態を取得します。
+			var value = parseInt(wave.getState().get(getIdtoKey(TargetId), '0'));
+			if(value == 1)
+			{
+				// 処理対象のユーザが「イイネ」している場合。
+
+				// サムネイルの画像用のimgタグを生成し、メンバー一覧に追加します。
+				var tmp = document.createElement('img');
+				tmp.src = TargetThumbnailUrl;
+				tmp.alt = TargetDisplayName;
+				tmp.title = TargetDisplayName;
+				tmp.width = 16;
+				tmp.height = 16;
+
+				likememberlist.appendChild(tmp);
+			}
+
+			// 処理対象のユーザと、処理中のユーザが等しく、かつ、「イイネ」をしている場合は、
+			// 「イイネ」ボタンの状態を「イイネを取り消す」にするため、フラグをOFFにする。
+			if((TargetId == ViewerId) && (value == 1))
+			{
+				blnLike = 0;
+			}
+		}
+
+		var image_name = "";
+		var alt_msg = "";
+
+		// ※トグル式のボタン表示なので、状態が逆転しているように見えるので注意。（動きはWassrに準拠させている）
+		if(blnLike == 0)
+		{
+			// 「イイネ」されている場合は、「イイネ」ボタンを表示し、「イイネを取り消す」のコメントを表示する。
+			image_name = "like.gif";
+			alt_msg = "イイネを取り消す";
+		}
+		else
+		{
+			// 「イイネ」されていない場合は、「イイネしてない」ボタンを表示し、「イイネする」のコメントを表示する。
+			image_name = "dislike.gif";
+			alt_msg = "イイネする";
+		}
+		// 「イイネ」ボタンのタグ属性を書き換える。
+		inputbutton.src = default_url + image_name;
+		inputbutton.alt = alt_msg;
+		inputbutton.title = alt_msg;
+
+		// ガジェットの高さを自動調整する。
+		gadgets.window.adjustHeight();
+	}
+
+	// 初期化処理。registerOnLoadHandlerで登録したことによって、ロード完了時に呼び出される。
+	function init()
+	{
+		//alert("Invoke Wave Instance");
+
+		// 書き換え対象のタグを取得しておく。
+		likememberlist = document.getElementById('likememberlist');
+		inputbutton = document.getElementById('inputbutton');
+
+		//wave.log("ILikeIt.init()");
+
+		// Waveコンテナの状態が準備できているなら、ステート変更時のファンクションを登録する。
+		if(wave && wave.isInWaveContainer())
+		{
+			wave.setStateCallback(stateUpdated);
+		}
+		// 初回の表示処理を行う。
+		stateUpdated();
+	}
+
+	// ロード完了時のファンクションを登録する。
+	gadgets.util.registerOnLoadHandler(init);
+
+</script>
+]]>
+  </Content>
+</Module>
