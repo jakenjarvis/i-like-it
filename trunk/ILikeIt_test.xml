@@ -173,6 +173,8 @@
 		// 処理中の人のユーザIDを取得します。
 		var ViewerId = wave.getViewer().getId();
 
+		debug_out.innerHTML = "";
+
 		// メンバー一覧の初期表示設定
 		likememberlist.innerHTML = "イイネ: ";
 		// イイネ状態の初期値設定
