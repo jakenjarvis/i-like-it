@@ -212,6 +212,14 @@
 				likememberlist.appendChild(tmp);
 
 
+				var tmp4 = document.createElement('img');
+				tmp4.src = "//lh5.ggpht.com/_ie1aNNydV6M/SwKnGIiep8I/AAAAAAAAAAU/ADItxdNxTxo/s104-c/fjbbs_jaken.jpg";
+				tmp4.alt = TargetDisplayName;
+				tmp4.title = TargetDisplayName;
+				tmp4.width = 16;
+				tmp4.height = 16;
+				debug_out.appendChild(tmp4);
+
 				var tmp2 = document.createElement('p');
 				var text = document.createTextNode(TargetThumbnailUrl);
 				tmp2.appendChild(text);
