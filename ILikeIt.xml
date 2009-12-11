@@ -32,6 +32,7 @@
 		height="20"
 		>
 		<Require feature="wave" />
+		<Require feature="dynamic-height" /><!-- ガジェット自身の高さを自動調整するために必要 -->
 	</ModulePrefs>
 <Content type="html">
 <![CDATA[
@@ -236,6 +237,8 @@
 		inputbutton.alt = alt_msg;
 		inputbutton.title = alt_msg;
 
+		// ガジェットの高さを自動調整する。
+		gadgets.window.adjustHeight();
 	}
 
 	// 初期化処理。registerOnLoadHandlerで登録したことによって、ロード完了時に呼び出される。
