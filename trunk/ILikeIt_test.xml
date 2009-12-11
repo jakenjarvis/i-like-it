@@ -190,6 +190,8 @@
 			var TargetDisplayName = TargetParticipant.getDisplayName();
 			var TargetThumbnailUrl = TargetParticipant.getThumbnailUrl();
 
+alert(TargetThumbnailUrl);
+
 			// 処理対象のユーザIDより、KEYを作成し、ステートに保管されている状態を取得します。
 			var value = parseInt(wave.getState().get(getIdtoKey(TargetId), '0'));
 			if(value == 1)
