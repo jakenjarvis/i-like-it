@@ -212,8 +212,6 @@
 				likememberlist.appendChild(tmp);
 
 
-				debug_out.appendChild(tmp);
-
 				var tmp2 = document.createElement('p');
 				var text = document.createTextNode(TargetThumbnailUrl);
 				tmp2.appendChild(text);
