@@ -27,7 +27,7 @@
 	-->
 	<ModulePrefs
 		title="I like it!"
-		description="これは、Google Wave用のガジェットです。Wassrのような「イイネ！」ボタンを表現します。"
+		description="これは、Google Wave用のガジェットです。Wassrのような「イイネ！」ボタンを表現します。This is a gadget for Google Wave. 'fav' button like Wassr is expressed.(Button of toggle type)"
 		author="Jaken"
 		>
 		<Require feature="wave" />
@@ -115,7 +115,7 @@
 	// 絶対参照先のURL（XML設置場所）
 	var default_url = "http://i-like-it.googlecode.com/svn/trunk/";
 
-	// ユーザIDに文字列を連結して返却します。
+	// ユーザIDに固定文字列を連結してKEYを返却します。
 	function getIdtoKey(id)
 	{
 		var tmp = String('key-' + id);
@@ -137,7 +137,7 @@
 		return tmp;
 	}
 
-	// 「イイネ」ボタンが押下されたときに呼び出されます。
+	// 「イイネ」ボタンが押下されたときに呼び出されます。（onClick属性で指定している）
 	function buttonClicked()
 	{
 		// 「イイネ」ボタンを押下した人のユーザIDを取得します。
@@ -160,12 +160,17 @@
 		}
 	}
 
-	// ステートの状態が変更された場合に、呼び出されます。
+	// ステートの状態が変更された場合に、呼び出されます。（wave.setStateCallbackで登録している）
 	function stateUpdated()
 	{
 //		if (wave.getState() == null)
 //		{
 //		}
+
+		// ステートの保管イメージは以下の通り
+		// KEY（"key-" + ユーザID）       ,VALUE 0 or 1
+		// key-jaken.jarvis@googlewave.com,1（イイネしている）
+		// key-************@googlewave.com,0（イイネしていない）
 
 		// 処理中の人のユーザIDを取得します。
 		var ViewerId = wave.getViewer().getId();
@@ -245,7 +250,7 @@
 		gadgets.window.adjustHeight();
 	}
 
-	// 初期化処理。registerOnLoadHandlerで登録したことによって、ロード完了時に呼び出される。
+	// 初期化処理。ロード完了時に呼び出される。（registerOnLoadHandlerで登録している）
 	function init()
 	{
 		//alert("Invoke Wave Instance");
