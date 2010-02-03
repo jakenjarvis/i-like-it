@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Module>
 	<!--
-	I like it! - Favorite of Wassrlike -
+	I like it! - Inspired by Wassr -
 
 	The MIT License
 
-	Copyright (c) 2009 Jaken.
+	Copyright (c) 2009 Jaken. (Shoji Morimoto, Jaken.Jarvis@gmail.com)
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,7 @@
 	-->
 	<ModulePrefs
 		title="I like it!"
-		description="これは、Google Wave用のガジェットです。Wassrのような「イイネ！」ボタンを表現します。This is a gadget for Google Wave. 'fav' button like Wassr is expressed.(Button of toggle type)"
+		description="This Gadget offers the 'favorite' button. The user who registered in the favorite can confirm it by having a look at the image."
 		author="Jaken"
 		>
 		<Require feature="wave" />
@@ -104,7 +104,7 @@
 	</div>
 </div>
 <div class="clear-both"> </div>
-
+<script type="text/javascript" charset = "utf-8" src="./ILikeIt_localize.js"></script>
 <script type="text/javascript">
 	// 「イイネ」をしたメンバー一覧の画像を表示する場所
 	var likememberlist = null;
@@ -114,6 +114,9 @@
 
 	// 絶対参照先のURL（XML設置場所）
 	var default_url = "http://i-like-it.googlecode.com/svn/trunk/";
+
+	// ローカライズ対応
+	var lang = "en";
 
 	// ユーザIDに固定文字列を連結してKEYを返却します。
 	function getIdtoKey(id)
@@ -176,7 +179,7 @@
 		var ViewerId = wave.getViewer().getId();
 
 		// メンバー一覧の初期表示設定
-		likememberlist.innerHTML = "イイネ: ";
+		likememberlist.innerHTML = localize.Message[lang].TitleHader; //イイネ: 
 		// イイネ状態の初期値設定
 		var blnLike = 1;
 
@@ -233,13 +236,13 @@
 		{
 			// 「イイネ」されている場合は、「イイネ」ボタンを表示し、「イイネを取り消す」のコメントを表示する。
 			image_name = "like.gif";
-			alt_msg = "イイネを取り消す";
+			alt_msg = localize.Message[lang].DislikeMessage; //イイネを取り消す
 		}
 		else
 		{
 			// 「イイネ」されていない場合は、「イイネしてない」ボタンを表示し、「イイネする」のコメントを表示する。
 			image_name = "dislike.gif";
-			alt_msg = "イイネする";
+			alt_msg = localize.Message[lang].LikeMessage; //イイネする
 		}
 		// 「イイネ」ボタンのタグ属性を書き換える。
 		inputbutton.src = default_url + image_name;
