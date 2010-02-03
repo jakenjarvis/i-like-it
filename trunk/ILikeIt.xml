@@ -278,7 +278,16 @@
         //alert("Invoke Wave Instance");
 
         // ブラウザの設定言語を取得する。
-        lang = getBrowserLanguage();
+        var brwlang = getBrowserLanguage();
+        if(brwlang in localize.Message)
+        {
+            lang = brwlang;
+        }
+        else
+        {
+            // default language.
+            lang = "en";
+        }
 
         // 書き換え対象のタグを取得しておく。
         likememberlist = document.getElementById('likememberlist');
