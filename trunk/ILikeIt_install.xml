@@ -1,7 +1,7 @@
 <extension
 	name="I like it! Ver1.01"
 	thumbnailUrl="http://i-like-it.googlecode.com/svn/trunk/ILikeIt_thumbnail.png"
-	description="This Gadget offers the 'favorite' button. The user who registered in the favorite can confirm it by having a look at the image."
+	description="Adds a favorites button to your wave, so that you and everyone else in the wave can indicate that they like the wave - with a cute smiley face, of course."
 	>
 	<!--
 	I like it! - Inspired by Wassr -
