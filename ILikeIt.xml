@@ -104,7 +104,7 @@
 	</div>
 </div>
 <div class="clear-both"> </div>
-<script type="text/javascript" charset = "utf-8" src="./ILikeIt_localize.js"></script>
+<script type="text/javascript" charset = "utf-8" src="http://i-like-it.googlecode.com/svn/trunk/ILikeIt_localize.js"></script>
 <script type="text/javascript">
 	// 「イイネ」をしたメンバー一覧の画像を表示する場所
 	var likememberlist = null;
