@@ -1,14 +1,14 @@
 <extension
-	name="I like it! Ver1.00"
+	name="I like it! Ver1.01"
 	thumbnailUrl="http://i-like-it.googlecode.com/svn/trunk/ILikeIt_thumbnail.png"
-	description="これは、Google Wave用のガジェットです。Wassrのような「イイネ！」ボタンを表現します。This is a gadget for Google Wave. 'fav' button like Wassr is expressed."
+	description="This Gadget offers the 'favorite' button. The user who registered in the favorite can confirm it by having a look at the image."
 	>
 	<!--
-	I like it! - Favorite of Wassrlike -
+	I like it! - Inspired by Wassr -
 
 	The MIT License
 
-	Copyright (c) 2009 Jaken.
+	Copyright (c) 2009 Jaken. (Shoji Morimoto, Jaken.Jarvis@gmail.com)
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
