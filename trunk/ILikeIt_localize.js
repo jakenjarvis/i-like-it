@@ -19,7 +19,7 @@ var localize =
 		{
 			"TitleHader" : "fav: ",
 			"LikeMessage" : "I like it!",
-			"DislikeMessage" : "dislike."
+			"DislikeMessage" : "I don't like it."
 		},
 		"ja":
 		{
